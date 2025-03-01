@@ -1,0 +1,41 @@
+{
+  "moduleFileExtensions": [
+    "ts",
+    "js"
+  ],
+  "transform": {
+    "^.+\\.(ts|tsx)$": ["ts-jest", "tsconfig.json"]
+  },
+  "testMatch": [
+    "**/test/**/*.test.(ts|js)"
+  ],
+  "testEnvironment": "node",
+  "collectCoverageFrom": [
+    "**/src/**/*.ts",
+    "!**/node_modules/**",
+    "!**/vendor/**",
+    "!**/src/migrations/*.ts"
+  ],
+  "collectCoverage": true,
+  "coverageReporters": [
+    "json",
+    "text",
+    "lcov",
+    "cobertura"
+  ],
+  "verbose": true,
+  "reporters": [
+    "default",
+    [
+      "jest-junit",
+      {
+        "ancestorSeparator": " › ",
+        "suiteNameTemplate": "{filename}",
+        "classNameTemplate": "{classname}",
+        "titleTemplate": "{title}",
+        "outputDirectory": "coverage",
+        "outputName": "TEST-Results-by-junit.xml"
+      }
+    ]
+  ]
+}

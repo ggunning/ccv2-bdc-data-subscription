@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="schema_name" value="#SCHEMA_NAME#" dbms="postgresql"/>
+    <property name="schema_username" value="#SCHEMA_USERNAME#" dbms="postgresql"/>
+    <property name="schema_password" value="#SCHEMA_PASSWORD#" dbms="postgresql"/>
+
+    <preConditions>
+        <dbms type="postgresql"/>
+    </preConditions>
+
+    <include file="log/db.initial.changelog.sql" relativeToChangelogFile="true"/>
+</databaseChangeLog>

@@ -1,0 +1,4 @@
+{
+    "backlogIds": ["FOS"],
+    "productStandardsToCheck": ["FC-1", "FC-2", "FC-3", "PSL-1", "SLC-25"]
+}

@@ -1,0 +1,143 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug IT data-subscription.test.ts",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/ring-deployment-tests/node_modules/jest/bin/jest.js",
+            "args": [
+                "${workspaceRoot}/ring-deployment-tests/src/data-subscription.test.ts",
+                "-i",
+                "--config",
+                "./ring-deployment-tests/jest.debug.config.json",
+                "--coverage=false",
+                "--runInBand"
+            ],
+            "env": {
+                "LOCAL_DEBUG": "true",
+                "SERVICE_URL": "https://api.mtls.dev.eu10.bdcfos.cloud.sap/dsapi/dss"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Current TS File of app",
+            "type": "node",
+            "request": "launch",
+            "args": ["${relativeFile}"],
+            "runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+            "env": {
+                "LOCAL_DEBUG": "true",
+                "LOCAL_DEBUG_DEFAULT_ENV_JSON_PATH": "",
+                "LOCAL_DB": "{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"postgres\",\"username\":\"account-registry\",\"password\":\"\"}",
+                "MODULE_NAME": "app",
+                "TS_NODE_PROJECT": "app/tsconfig.json",
+                "FOS_DEFAULT_LOG_LEVEL": "debug",
+                "FOS_LOG_LEVEL": "debug",
+                "FOS_LOG_SIMPLE_FORMAT": "true"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Current TS File of app",
+            "type": "node",
+            "request": "launch",
+            "args": ["${relativeFile}"],
+            "runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+            "env": {
+                "LOCAL_DEBUG": "true",
+                "LOCAL_DEBUG_DEFAULT_ENV_JSON_PATH": "",
+                "MODULE_NAME": "app",
+                "TS_NODE_PROJECT": "app/tsconfig.json",
+                "FOS_DEFAULT_LOG_LEVEL": "debug",
+                "FOS_LOG_LEVEL": "debug",
+                "FOS_LOG_SIMPLE_FORMAT": "true"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "All JEST test files of app",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/node_modules/jest/bin/jest.js",
+            "args": [
+                "-i",
+                "--config",
+                "jest.json"
+            ]
+        },
+        {
+            "name": "Current UT JEST test file of app",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/node_modules/jest/bin/jest.js",
+            "args": [
+                "${relativeFile}",
+                "-i",
+                "--config",
+                "app/jest.json",
+                "--testNamePattern",
+                "",
+                "--coverage=false"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Current IT JEST test file of app",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/ring-deployment-tests/node_modules/jest/bin/jest.js",
+            "runtimeExecutable": "/opt/homebrew/bin/node",
+            "env": {
+                "SERVICE_URL": "https://api.mtls.dev.eu10.bdcfos.cloud.sap/dsapi/dss",
+                "TEST_RESULT_PROCESSOR_URL": "http://localhost:8080",
+                "TEAM_NAME": "lighthugger",
+                "SERVICE_NAME": "fos-data-subscription-svc",
+                "IS_RING_DEPLOYMENT_RELATED": "false",
+                "TEST_RESULT_SLACK_CHANNEL_ID": "C07MMQA7WJ2",
+                "LOCAL_DEBUG": "true"
+            },
+            "args": [
+                "${relativeFile}",
+                "-i",
+                "--config",
+                "ring-deployment-tests/jest.json",
+                "--testNamePattern",
+                "",
+                "--coverage=false"
+            ],
+            "console": "integratedTerminal"
+        },
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "cwd": "${workspaceFolder}/app",
+            "program": "${workspaceFolder}/app/src/start.ts",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "env": {
+                "POSTGRES_DB": "postgres",
+                "POSTGRES_USER": "postgres",
+                "POSTGRES_PASSWORD": "postgres",
+                "POSTGRES_HOST": "localhost",
+                "POSTGRES_PORT": "5432",
+                "POSTGRES_SSLCERT": "CERT",
+                "SCHEMA_NAME": "data_subscription",
+                "SCHEMA_USERNAME": "postgres",
+                "SCHEMA_PASSWORD": "postgres"
+            }
+        }
+    ]
+}

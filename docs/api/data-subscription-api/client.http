@@ -1,0 +1,41 @@
+### DEV values
+# port forward pod to your local machine
+@serviceUrl = http://localhost:3000
+
+### Check health
+GET {{serviceUrl}}/probes/health
+
+### GET all subscriptions
+GET {{serviceUrl}}/v0/dataSubscriptions?subscriber=/eu10/bdcfos/tenant1234
+Authorization: Bearer {{token}}
+
+### POST subscription
+POST {{serviceUrl}}/v0/dataSubscriptions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "subscriber": "/eu10/bdcfos/tenant1234",
+    "producer": "/us-west-2/hcm/ten1234",
+    "dataSourceId": "ba0cdafa-bfc2-4968-a92b-bcf25e2e6878",
+    "schedule": "0 8 * * *",
+    "destinationPath": "/eu10/bdcfos/tenant1234/destinations/destination1"
+}
+
+### GET subscription by id
+@id = ff81b04d-0a01-4d0a-b9d6-b83d137229f2
+GET {{serviceUrl}}/v0/dataSubscriptions/{{id}}
+Authorization: Bearer {{token}}
+
+### PATCH subscription
+PATCH {{serviceUrl}}/v0/dataSubscriptions/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "schedule": "0 4 * * *"
+}
+
+### DELETE subscription
+DELETE {{serviceUrl}}/v0/dataSubscriptions/{{id}}
+Authorization: Bearer {{token}}

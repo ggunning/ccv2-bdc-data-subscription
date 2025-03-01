@@ -1,0 +1,25 @@
+{  
+  "moduleFileExtensions": ["js","ts"],
+  "testMatch": [
+    "**/bin/**/*.test.[tj]s"
+  ],
+  "testEnvironment": "node",
+  "verbose": true,
+  "reporters": [
+    [
+      "default",
+      {
+        "verbose": true
+      }
+    ],
+    [
+      "jest-json-reporter2",
+      {
+        "outputDir": "/tmp",
+        "outputFile": "test-results.json",
+        "fullOutput": true
+      }
+    ]
+  ],
+  "globalTeardown": "./bin/configs/global-teardown.js"
+}

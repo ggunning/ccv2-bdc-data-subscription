@@ -1,0 +1,33 @@
+general:
+  productiveBranch: 'main'
+  buildTool: docker
+  ppmsID: '73554900100200024647'
+  sapPiperDownloadCredentialsId: 'jaasId'
+  gitHttpsCredentialsId: 'SAPToolingGithubAPIAccess'
+  verbose: true
+
+steps:
+  executeBuild:
+    sapCumulusUpload: false
+  #   xMakeDownloadDownstreamsProjectArchives: true
+  sapXmakeExecuteBuild:
+    # needed, because repository is in github.tools
+    jobNamePattern: 'GitHub-Tools'
+  artifactPrepareVersion:
+    buildTool: custom
+    customVersionSection: xmake
+    customVersioningScheme: maven
+    filePath: cfg/xmake.cfg
+    versioningType: cloud_noTag
+  
+  # Setting up a Protecode scan
+  # https://github.tools.sap/MDxC/Docs/blob/e20327d7c5dab2bd5f5a3bcad443ce7ce68aa9aa/docs/Micro_Delivery/getting_started/checks_and_scans/setting_up_a_protecode_scan.md
+  executeProtecodeScan:
+    reuseExisting: true
+    includeSLESFindingAutoTriage: false
+    # Set your protecode group id you received from Security Team here:
+    protecodeGroup: 2928
+    protecodeIgnoreSlesVulnerabilities: true
+  # sapCumulusUpload: # https://github.wdf.sap.corp/ContinuousDelivery/piper-doc/blob/b296d66f49063f0bedba8463e9280e3e89018e87/docs/stages/cumulus-integration.md
+    # pipelineId: '9396af02-e871-4df1-a934-573d7f19eae0' # https://github.wdf.sap.corp/DBaaS/Docs/blob/bdc-test/docs/overviews/services.yaml
+    # cumulusFileCredentialsId: 'cumulusFileCredentialsId'

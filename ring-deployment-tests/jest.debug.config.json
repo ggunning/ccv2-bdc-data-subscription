@@ -1,0 +1,14 @@
+{  
+  "moduleFileExtensions": ["js","ts"],
+  "testMatch": [
+    "**/src/**/*.test.[tj]s"
+  ],
+  "testEnvironment": "node",
+  "verbose": true,
+  "transform": {
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
+      "tsconfig.json"
+    ]
+  }
+}

@@ -1,0 +1,3 @@
+EXTRACT app/coverage/lcov.info
+EXTRACT app/coverage/cobertura-coverage.xml
+EXTRACT app/coverage/TEST-Results-by-junit.xml

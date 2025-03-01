@@ -1,0 +1,58 @@
+{
+  "$id": "data-subscription-scheduled-schema",
+  "type": "object",
+  "title": "Data subscription scheduled schema",
+  "required": [
+    "subscriber",
+    "producer",
+    "dataSourceId",
+    "schedule",
+    "destinationPath"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "subscriber": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "^/[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+/[a-zA-Z0-9._:-]+$",
+      "examples": [
+        "/us-west-2/prism/Account123"
+      ]
+    },
+    "producer": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "^/[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+/[a-zA-Z0-9._:-]+$",
+      "examples": [
+        "/us-west-2/ariba/TENANT123"
+      ]
+    },
+    "dataSourceId": {
+      "type": "string",
+      "pattern": "^[^<>]*$",
+      "maxLength": 256,
+      "examples": [
+        "JobPosting"
+      ]
+    },
+    "schedule": {
+      "type": "string",
+      "pattern": "^[^<>]*$",
+      "maxLength": 256,
+      "examples": [
+        "* * 8 * * *"
+      ]
+    },
+    "beginWatermark": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "destinationPath": {
+      "type": "string",
+      "format": "uri-reference",
+      "examples": [
+        "/store/fieldglass/us-west-2/fg-tenant-123/delivery-batch123"
+      ]
+    }
+  }
+}

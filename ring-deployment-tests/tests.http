@@ -1,0 +1,20 @@
+# Open your VS Code settings (Ctrl + , or Cmd + ,).
+# Search for rest-client.environmentVariables.
+# "rest-client.environmentVariables": {
+#     "mtls": {
+#         "baseUrl": "https://api.mtls.dev.eu10.bdcfos.cloud.sap",
+#         "cert": "/full/path/to/local-debug/rest/cert",
+#         "key": "/full/path/to/local-debug/rest/key"
+#     }
+# }
+
+
+### Request with basic auth
+GET http://localhost:3000/probes/health
+
+### Request with bearer token
+GET https://api.mtls.dev.eu10.bdcfos.cloud.sap/dsapi/dss/probes/health
+
+### Request with mutual TLS
+### Need to investigate why it's not working in this addon
+GET https://api.mtls.dev.eu10.bdcfos.cloud.sap/dsapi/dss/v0/dataSubscriptions

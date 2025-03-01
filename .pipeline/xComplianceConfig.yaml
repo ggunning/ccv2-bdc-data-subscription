@@ -1,0 +1,60 @@
+Config: V1.0 # Check https://md.com/OurDocu/Framework-Config.yaml for current version
+Component:
+  Name: "BDC FOS DATA SUBSCRIPTION Service" # Not active
+  ComponentType: "docker-nodejs" # Not active
+  PPMS:
+    Name: "BDC FOS DATA SUBSCRIPTION SVC V1" # Not active
+    Id: "73554900100200024647" # Not active
+  Cumulus:
+    microdeliverygroup: "BDC-FOS" # Not active
+    PipelineID: "9396af02-e871-4df1-a934-573d7f19eae0" # Not active
+  Lifecycle: "ReadyForRelease"
+Scanner:
+  Mend:
+    ProductName: "DIST - BDC FOS"
+    AgentFilePath: "./" # Not active
+    Container:
+      securityVulnerabilities: true
+      failOnSevereVulnerabilities: false
+  CheckMarxOne:
+    ApplicationName: "BDC_PRODUCTS"
+    ProjectPrefix: "no prefix"
+  BDBA: # previously protecode
+    Group: "2928" # protecodeGroup # Not active
+  Sonar:
+    PropertiesFilepath: "./" # Not active
+  Hadolint:
+    DockerfilePath: "./Dockerfile"
+Notifications:
+  Jira:
+    SupportComponent: "Foundation Services" # Not active
+    JiraProject: "FOS" # Not active
+MandatoryGates:
+  protecode-vulnerabilities-gate: false
+  pullrequest-gate: false
+  # checkmarx-one-gate: false
+  # coverage-gate: true
+  # cumulus-lock-gate: true
+  # eccn-gate: true
+  # fortify-gate: true
+  # foss-cvss-gate: true
+  # foss-in-ppms-gate: true
+  # foss-in-source-gate: true
+  # foss-license-gate: true
+  # foss-policy-gate: true
+  # general-evidences-gate: true
+  # ghas-gate: true
+  # golang-version-gate: true
+  # haas-lib-version-gate: true
+  # hadolint-gate: true
+  # outdated-foss-gate: true
+  # post-production-gate: true
+  # ppms-sync-gate: true
+  # pre-production-gate: true
+  # product-requirements-gate: true
+  # production-postsubmit-gate: true
+  # sonar-gate: true
+  # testresults-gate: true
+  # virus-vulnerabilities-gate: true
+  # whitesource-container-scan-gate: true
+  # whitesource-source-scan-gate: true

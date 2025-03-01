@@ -1,0 +1,146 @@
+[
+  {
+    "source_reference": "Test create Data subscription%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "Test get Data subscription%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "Test Update Data subscription%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "Test Delete Data subscription%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "Test get all Data subscriptions%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "Test basics%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "Test getAuditLogService%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "validate subscription scheduled schema%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "setDefaultHeaders%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "requireId%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "Error Handling%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "test handApiError%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "dataSubscriptionModelInit%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "@Lighthugger Health API%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "@Lighthugger readiness probe%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "@Lighthugger liveness probe%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "deliveryNotificationModelInit%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "verifyCertificateMtls%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "test audit service%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "test MW%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "sonar massage%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "auditlog management%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "Health Endpoint%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  },
+  {
+    "source_reference": "test utils%",
+    "jira_keys": [
+      "FOS-1439"
+    ]
+  }
+]

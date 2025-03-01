@@ -1,0 +1,13 @@
+**/.git
+**/.vscode
+**/.pipeline
+**/node_modules/
+**/README.md
+**/LICENSE
+**/npm-debug.log
+**/.env
+**/.editorconfig
+**/dist
+**/bin
+**/coverage
+**/Dockerfile

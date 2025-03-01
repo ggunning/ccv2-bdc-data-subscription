@@ -1,0 +1,23 @@
+{
+  "$id": "data-subscription-update-schema",
+  "type": "object",
+  "title": "Data subscription update schema",
+  "additionalProperties": false,
+  "properties": {
+    "schedule": {
+      "type": "string",
+      "pattern": "^[^<>]*$",
+      "maxLength": 256,
+      "examples": [
+        "* * 8 * * *"
+      ]
+    },
+    "upperWatermark": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "active": {
+      "type": "boolean"
+    }
+  }
+}

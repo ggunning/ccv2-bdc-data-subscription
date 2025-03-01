@@ -1,0 +1,21 @@
+#!groovy
+
+@Library(value='piper-lib-os', changelog=false)
+@Library(value='piper-lib', changelog=false)
+@Library(value='haas-jenkins-lib', changelog=false) // https://github.wdf.sap.corp/DBaaS/haas-jenkins-lib
+/* groovylint-disable-next-line LineLength */
+@Library(value='bdc-fos-templates', changelog=false) // https://github.tools.sap/bdc-fos/bdc-fos-templates/blob/main/vars/nodejsPipeline.groovy
+_
+
+nodejsPipeline([ // it is defined in bdc-fos-templates library
+  SIMULATE_MASTER: false,
+  DISABLE_SLACK_NOTIFICATION: true,
+  /* groovylint-disable-next-line LineLength */
+  GITHUB_SERVICES_YAML_RAW_URL: 'https://github.wdf.sap.corp/raw/DBaaS/Docs/bdc-test/docs/overviews/services.yaml', // https://github.wdf.sap.corp/DBaaS/Docs/blob/bdc-test/docs/overviews/services.yaml
+  /* groovylint-disable-next-line LineLength */
+  GITHUB_SERVICES_STATUS_YAML_RAW_URL: 'https://github.wdf.sap.corp/raw/DBaaS/Docs/bdc-test/docs/overviews/service_status.yaml', // https://github.wdf.sap.corp/DBaaS/Docs/blob/bdc-test/docs/overviews/service_status.yaml
+  PARALLEL_SCANS: true,
+  INCLUDE_RING_DEPLOYMENT: true,
+  INCLUDE_LIQUIBASE: true,
+  XCOMPLIANCE_CONFIG_PATH: '.pipeline/xComplianceConfig.yaml'
+])

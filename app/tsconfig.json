@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es2021",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "outDir": "./bin",
+        "baseUrl": "./src",
+        "lib": [
+            "es2021"
+        ]
+    },
+    "include": [
+        "src/**/*.ts",
+        "test/**/*.ts"
+    ]
+}

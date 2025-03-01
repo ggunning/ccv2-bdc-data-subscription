@@ -1,0 +1,46 @@
+{
+  "name": "ring-deployment-tests-of-data-subscription-service",
+  "version": "1.0.0",
+  "description": "Ring Deployment Tests of DS API Data Subscription Service",
+  "scripts": {
+    "start": "node bin/start.js",
+    "clean": "./scripts/clean.sh",
+    "build": "npm run tsbuild",
+    "tsbuild": "tsc --project tsconfig.json",
+    "tswatch": "tsc --watch --preserveWatchOutput",
+    "eslint": "eslint .",
+    "eslint-fix": "eslint --fix .",
+    "audit": "npm audit --parseable --audit-level=high || true",
+    "test": "npm run eslint && npm run audit"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@bdc-fos/fos-logger": "^1.0.10",
+    "@sap/xsenv": "^5.2.0",
+    "@sap/xssec": "^4.2.4",
+    "axios": "^1.7.7",
+    "jest": "^29.7.0",
+    "jest-json-reporter2": "^1.1.0",
+    "jest-junit": "^16.0.0",
+    "node-jose": "^2.2.0"
+  },
+  "devDependencies": {
+    "@bdc-fos/eslint-config": "^9.0.4",
+    "@types/jest": "^29.5.13",
+    "@types/node-jose": "^1.1.13",
+    "@types/sap__xsenv": "^3.3.2",
+    "@types/validator": "^13.12.2",    
+    "eslint": "^9.18.0",    
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.6.2"
+  },
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  },
+  "overrides": {
+    "cross-spawn": "^7.0.5"
+  }
+}

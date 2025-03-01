@@ -1,0 +1,457 @@
+---
+openapi: 3.0.2
+info:
+  title: Data Subscription API (producer)
+  description: |
+    Data subscription API exposes all subscriptions created at the Producer. This API allows Subscriber to request data delivery by creating a subscription at Producer, as well as query and update state of the subscription.
+  version: '0.0.1'
+externalDocs: 
+  description: Data subscription API
+  url: https://github.tools.sap/bdc-fos/fos-data-subscription-svc
+x-sap-shortText: The Data Subscription API allows Subscribers to create, query, and update subscriptions at the Producer for data delivery
+servers:
+  - url: https://api.mtls.dev.eu10.bdcfos.cloud.sap/dsapi/dss/v0/
+    description: Development env
+  - url: https://api.mtls.sandbox.api.sap.com/namespace/v0/TBD
+    description: Sandbox   
+tags:
+  - name: Data Subscription API
+
+paths:
+  /v0/dataSubscriptions:
+    post:
+      summary: Create subscription record
+      description: |
+        Create subscription record. Request that a data extraction job runs at a specific time and a specific interval.
+
+        The first extraction will be a full load starting at `beginWatermark`. Subsequent runs in the schedule will be diffs and output as separate objects: upserts and deletes. This is synchronous service, when the response is returned, subscription resource is created. Producer is expected to start delivering data based on the subscription configuration, with a best-effort approach.
+
+        Only one subscription can be created for a particular combination of `producer`, `dataSourceId` and `subscriber`.
+
+        Id of created subscription resource is used as a subscription identifier in subsequent Delivery Notifications sent by the Producer.
+      tags:
+        - Data Subscription API
+      requestBody:
+        description: |
+          Provides the following fields as a `JSON` payload:
+          <br/>• `subscriber`: (_Required_) Subscriber identifier.
+          <br/>• `producer`: (_Required_) Producer identifier.
+          <br/>• `dataSourceId`: (_Required_) Data source to subscribe to (always the latest version of the data source).
+          <br/>• `schedule`: (_Required_) Specifies the extract run schedule using standard [cron expression](https://www.quartz-scheduler.org/api/2.1.7/org/quartz/CronExpression.html)  notation. Defaults to `0 8 * * *`.
+          <br/>• `beginWatermark`: Point in time from when the extraction should generate data from. Default is 1st January 2 years earlier than the current timestamp.
+          Value must adhere to ISO 8601 UTC date-time format as specified in [RFC3339](https://tools.ietf.org/html/rfc3339).
+          <br/>• `upperWatermark`: (_Not part of the request body_) Defines the upper boundary of the data window that has been sent to the subscriber; therefore, it is set to the `upperWatermark` of the last delivery notification that was sent. For newly created subscription, it is always set to `beginWatermark`. `upperWatermark` can also be lowered (by PATCH call) signaling that producer needs to resend the data. Value must adhere to ISO 8601 UTC date-time format as specified in [RFC3339](https://tools.ietf.org/html/rfc3339).
+          <br/>• `destinationPath`: (_Required_) Destination path for this particular subscription, Producer writes to destination HDLfs URI assembled as: `<base URL provided via UCL SPII>/webhdfs/v1/<destinationPath>/initial/<runId>/<filename>.jsonl?op=<operation>` Operation is defined by HDLfs API. The complete url from the above example would read: `https://hdl.sap.com/webhdfs/v1/staging/blob/sap.fieldglass/v1/jobposting/initial/20250228134000/file001.jsonl?op=CREATE`.
+          <br/>• `id`: (_Not part of the request body_) It is expected that the producer will generate the `id` as primary key of persisted subscription (preferably UUID v4). FOS will then use this primary key to reference specific subscription in case of READ/PATCH/DELETE operations.
+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostSubscriptionRequest'
+      parameters:
+        - $ref: '#/components/parameters/bdcfos-producer-tenantid'
+      responses:
+        '201':
+          description: Subscription created
+          headers:
+            Date:
+              $ref: '#/components/headers/Date'
+            Cache-Control:
+              $ref: '#/components/headers/Cache-Control-Nostore'
+            Cross-Origin-Resource-Policy:
+              $ref: '#/components/headers/Cross-Origin-Resource-Policy'
+            Strict-Transport-Security:
+              $ref: '#/components/headers/Strict-Transport-Security'
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: uuid
+                example: 3fa85fsf-5717-4562-b3fc-2c963f66afre
+        4XX:
+          $ref: '#/components/responses/error'
+    get:
+      summary: Get list of all available subscription records
+      description: Get list of all available subscription records based on filter params; Producer is expected to allow `subscriber` query parameter matching the authenticated subscriber.
+      tags:
+        - Data Subscription API
+      parameters:
+        - $ref: '#/components/parameters/bdcfos-producer-tenantid'
+        - $ref: '#/components/parameters/subscriber'
+        - $ref: '#/components/parameters/producer'
+        - $ref: '#/components/parameters/skip'
+        - $ref: '#/components/parameters/top'
+      responses:
+        '200':
+          description: Retrieved subscription list
+          headers:
+            Date:
+              $ref: '#/components/headers/Date'
+            Cache-Control:
+              $ref: '#/components/headers/Cache-Control-Nostore'
+            Cross-Origin-Resource-Policy:
+              $ref: '#/components/headers/Cross-Origin-Resource-Policy'
+            Strict-Transport-Security:
+              $ref: '#/components/headers/Strict-Transport-Security'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionListResponse'
+        4XX:
+          $ref: '#/components/responses/error'
+
+  /v0/dataSubscriptions/{id}:
+    parameters:
+      - description: 'key: id'
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Get subscription details
+      description: Fetch the details of an existing subscription.
+      tags:
+        - Data Subscription API
+      parameters:
+        - $ref: '#/components/parameters/bdcfos-producer-tenantid'
+      responses:
+        '200':
+          description: Retrieved subscription
+          headers:
+            Date:
+              $ref: '#/components/headers/Date'
+            Cache-Control:
+              $ref: '#/components/headers/Cache-Control-Nostore'
+            Cross-Origin-Resource-Policy:
+              $ref: '#/components/headers/Cross-Origin-Resource-Policy'
+            Strict-Transport-Security:
+              $ref: '#/components/headers/Strict-Transport-Security'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriptionResponse'
+        '404':
+          $ref: '#/components/responses/not-found-error'
+        4XX:
+          $ref: '#/components/responses/error'
+
+    patch:
+      summary: Update subscription details    
+      description: |
+        Update subscription details. Only update of properties `schedule`, `active` and `upperWatermark` is supported.
+
+        Lowering the `upperWatermark` signals that producer needs to resend the data that might have already been sent in previous batches. Value of the `upperWatermark` must adhere to ISO 8601 UTC date-time format as specified in [RFC3339](https://tools.ietf.org/html/rfc3339).
+
+        Upper watermark should be updated by the Producer with every delivery notification sent, i.e. specifies upper watermark of the last successfully notification sent to the Subscriber.
+
+        Pause / Resume current subscription using `active` column
+
+        All requests that will try to update any other attribute should be rejected.
+      tags:
+        - Data Subscription API
+
+      parameters:
+        - $ref: '#/components/parameters/bdcfos-producer-tenantid'
+        - $ref: '#/components/parameters/ifmatch'
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSubscriptionRequest'
+
+      responses:
+        '200':
+          description: Subscription created
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: uuid
+                example: 3fa85fsf-5717-4562-b3fc-2c963f66afre
+        '404':
+          $ref: '#/components/responses/not-found-error'
+        '412':
+          $ref: '#/components/responses/etag-not-match'
+        '428':
+          $ref: '#/components/responses/etag-not-found'
+        4XX:
+          $ref: '#/components/responses/error'
+
+    delete:
+      summary: Delete subscription record
+      description: |
+        Delete subscription record. This signals Producer that a data extraction job should be stopped.
+      tags:
+        - Data Subscription API
+      parameters:
+        - $ref: '#/components/parameters/bdcfos-producer-tenantid'
+      responses:
+        '204':
+          description: No body
+        '404':
+          $ref: '#/components/responses/not-found-error'
+        4XX:
+          $ref: '#/components/responses/error'
+
+components:
+  securitySchemes:
+    mTLSAuth:
+      scheme: tls
+      type: http
+      description: "To use this API, you must authenticate using mutual TLS (mTLS). Both the client and the server will authenticate each other using certificates."
+  headers:  # RESPONSE Headers
+    Date:
+      description: https://tools.ietf.org/html/rfc7231#section-7.1.1.2
+      schema:
+        type: string
+        format: date-time
+    Cache-Control-Nostore:
+      description: This is set to `nostore` to disable the caching of responses
+      schema:
+        type: string
+    Strict-Transport-Security:
+      description: Instructs browsers to always use a secure HTTPS connection for a website, enhancing security by preventing downgrade attacks.
+      schema:
+        type: string
+    Cross-Origin-Resource-Policy:
+      description: Lets a website control how browsers handle requests for its resources from other websites, adding an extra layer of protection against unauthorized access.
+      schema:
+        type: string
+    Location:
+      description: The `Location` will be set with a URL of newly created resource (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Location).
+      schema:
+        type: string
+        format: uri
+    ETag:
+      description: Identifier for a specific version of a resource
+      schema:
+        type: string
+
+  schemas:
+    GetSubscriptionListResponse:
+      title: GetSubscriptionListResponse
+      type: object
+      properties:
+        dataSubscriptions:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+              _links:
+                $ref: '#/components/schemas/links'
+          example:
+            - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+              _links:
+                self: https://producer.subscription.com/v0/dataSubscriptions/3fa85f64-5717-4562-b3fc-2c963f66afaa
+            - id: frd85f64-5897-4589-b3fc-2c963f66bdb54
+              _links:
+                self: https://producer.subscription.com/v0/dataSubscriptions/frd85f64-5897-4589-b3fc-2c963f66bdb54
+        next:
+          type: string
+          format: uri
+          example: "https://producer.subscription.com/v0/dataSubscriptions?skip=2&top=50"
+
+    PostSubscriptionRequest:
+      title: PostSubscriptionRequest
+      type: object
+      properties:
+        subscriber:
+          type: string
+          maxLength: 256
+          example: "/eu10/sap.bdcfos/6fd6236b-eb91-464e-9dff-1aa51396e06a"
+        producer:
+          type: string
+          maxLength: 256
+          example: "/us-west-2/sap.fieldglass/tenant123"
+        dataSourceId:
+          type: string
+          maxLength: 256
+          example: "sap.fieldglass:dataProduct:JobPosting:v1.0.0"
+        schedule:
+          type: string
+          format: cron
+          example: "0 8 * * *"
+        beginWatermark:
+          type: string
+          format: date-time
+          default: epoch
+          example: "2022-12-16T14:22:04Z"
+        destinationPath:
+          type: string
+          example: "/staging/blob/sap.fieldglass/v1/jobposting"
+      required:
+        - subscriber
+        - producer
+        - dataSourceId
+        - schedule
+        - beginWatermark
+        - destinationPath
+
+    PatchSubscriptionRequest:
+      title: PatchSubscriptionRequest
+      type: object
+      properties:
+        schedule:
+          type: string
+          format: cron
+          example: "0 8 * * *"
+        upperWatermark:
+          type: string
+          format: date-time
+          default: epoch
+          example: "2022-12-16T14:22:04Z"
+        active:
+          type: boolean
+          example: false
+
+    GetSubscriptionResponse:
+      title: GetSubscriptionResponse
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: "3fa85f64-5717-4562-b3fc-2c963f66afaa"
+            upperWatermark:
+              type: string
+              format: date-time
+              example: "2022-12-16T14:22:04Z"
+            active:
+              type: boolean
+              example: false
+          required:
+            - id
+            - upperWatermark
+            - active
+        - $ref: '#/components/schemas/PostSubscriptionRequest'
+        - type: object
+          properties:
+            _links:
+              $ref: '#/components/schemas/links'
+
+    links:
+      type: object
+      required:
+        - self
+      properties:
+        self:
+          type: string
+          format: uri
+          example: https://producer.subscription.com/v0/dataSubscriptions/3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+  parameters:
+    bdcfos-producer-tenantid:
+      in: header
+      required: true
+      name: bdcfos-producer-tenantid
+      description: This field relays the information to recipient, about the tenant, that the request belongs to. As an example of usage - the recipient uses the information in this header field to retrieve authentication data from persistence and compare the received credentials with the stored data.
+      schema:
+        type: string
+    producer:
+      name: producer
+      in: query
+      description: Filtering by producer
+      schema:
+        type: string
+        minLength: 0
+      example: /us-west-2/sap.fieldglass/tenant123
+    subscriber:
+      name: subscriber
+      in: query
+      required: true
+      description: Filtering by subscriber
+      schema:
+        type: string
+        minLength: 0
+      example: /eu10/sap.bdcfos/6fd6236b-eb91-464e-9dff-1aa51396e06a
+    skip:
+      name: $skip
+      in: query
+      description: Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)
+      schema:
+        minimum: 0
+        type: integer
+    top:
+      name: $top
+      in: query
+      description: Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)
+      schema:
+        minimum: 0
+        type: integer
+    ifmatch:
+      name: if-match
+      in: header
+      required: true
+      description: Identifier for a specific version of a resource
+      schema:
+        type: string
+        minLength: 0
+      example: 12345
+
+  responses:
+    not-found-error:
+      description: Object does not exist
+      headers:
+        Date:
+          $ref: '#/components/headers/Date'
+        Cache-Control:
+          $ref: '#/components/headers/Cache-Control-Nostore'
+        Cross-Origin-Resource-Policy:
+          $ref: '#/components/headers/Cross-Origin-Resource-Policy'
+        Strict-Transport-Security:
+          $ref: '#/components/headers/Strict-Transport-Security'
+
+    etag-not-match:
+      description: Precondition failed
+      headers:
+        Date:
+          $ref: '#/components/headers/Date'
+        Cache-Control:
+          $ref: '#/components/headers/Cache-Control-Nostore'
+        Cross-Origin-Resource-Policy:
+          $ref: '#/components/headers/Cross-Origin-Resource-Policy'
+        Strict-Transport-Security:
+          $ref: '#/components/headers/Strict-Transport-Security'
+
+    etag-not-found:
+      description: Precondition required
+      headers:
+        Date:
+          $ref: '#/components/headers/Date'
+        Cache-Control:
+          $ref: '#/components/headers/Cache-Control-Nostore'
+        Cross-Origin-Resource-Policy:
+          $ref: '#/components/headers/Cross-Origin-Resource-Policy'
+        Strict-Transport-Security:
+          $ref: '#/components/headers/Strict-Transport-Security'
+
+    error:
+      description: Error
+      headers:
+        Date:
+          $ref: '#/components/headers/Date'
+        Cache-Control:
+          $ref: '#/components/headers/Cache-Control-Nostore'
+        Cross-Origin-Resource-Policy:
+          $ref: '#/components/headers/Cross-Origin-Resource-Policy'
+        Strict-Transport-Security:
+          $ref: '#/components/headers/Strict-Transport-Security'
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: Bad request
