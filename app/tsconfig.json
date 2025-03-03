@@ -8,8 +8,10 @@
         "outDir": "./bin",
         "baseUrl": "./src",
         "lib": [
-            "es2021"
-        ]
+            "es2021",
+            "DOM"
+        ],
+        "skipLibCheck": true
     },
     "include": [
         "src/**/*.ts",
