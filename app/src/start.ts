@@ -13,6 +13,15 @@ import process from 'node:process';
 passport.use('mtls-auth', new Strategy(verifyCertificateMtls));
 
 export const app = express();
+
+// ✅ **1️⃣ Log All Incoming Requests (Before Any Middleware)**
+app.use((req, res, next) => {
+    logger.info(`Incoming request: ${req.method} ${req.url}`);
+    logger.info(`Headers: ${JSON.stringify(req.headers, null, 2)}`);
+    logger.info(`Body: ${JSON.stringify(req.body, null, 2)}`);
+    next();
+});
+
 app.use(helmet()); // https://helmetjs.github.io
 app.use(loggerMiddleware);
 app.use(setDefaultHeaders);
@@ -37,8 +46,8 @@ app.use(errorHandler);
 // Tell jest to ignore next block for coverage because it will never be executed in test environment
 /* istanbul ignore next */
 if (process.env.NODE_ENV !== 'test') {
-    const port = process.env.PORT ?? 3000;
-    app.listen(port, () => {
+    const port = Number(process.env.PORT ?? 3000);
+    app.listen(port, '0.0.0.0', () => {
         logger.info(`Server listening on port: ${port}`);
     });
     handleErrors(process);

@@ -1,0 +1,8 @@
+{
+  "subscriber": "/eu10/sap.bdcfos/6fd6236b-eb91-464e-9dff-1aa51396e06a",
+  "producer": "/us-west-2/sap.fieldglass/tenant123",
+  "dataSourceId": "sap.fieldglass:dataProduct:JobPosting:v1.0.0",
+  "schedule": "0 8 * * *",
+  "beginWatermark": "2022-12-16T14:22:04Z",
+  "destinationPath": "/staging/blob/sap.fieldglass/v1/jobposting"
+}

@@ -2,7 +2,7 @@ import { convertToSafeError, logger } from '@bdc-fos/fos-logger';
 import { readFileSync } from 'fs';
 import { StatusCodes } from 'http-status-codes';
 import path from 'path';
-import type { Options, Sequelize } from 'sequelize';
+import { Options, Sequelize } from 'sequelize';
 import { getPostgresService } from "./common";
 import { initModels } from './models';
 
@@ -28,6 +28,7 @@ export const serviceInfo = {
     version: SERVICE_VERSION
 };
 
+/* skip the db
 export const connectDatabase = async (cdInitModels: (uri: string, options: Options) => Sequelize, logLevel = 'silly', schema?: string): Promise<Sequelize | undefined> => {
     const dbCredentials = getPostgresService()
     const database: Sequelize = cdInitModels(dbCredentials.uri, {
@@ -50,6 +51,21 @@ export const connectDatabase = async (cdInitModels: (uri: string, options: Optio
         return undefined;
     }
 };
+*/
+
+export const connectDatabase = async (initModelsFunction = initModels) => {
+    console.log("🔹 Initializing in-memory SQLite database...");
+
+    console.log("🔹 Calling initModels with a valid URI and options...");
+    const dbInstance = initModels("sqlite::memory:", { dialect: "sqlite", logging: false } as Options); 
+
+    console.log("🔹 Syncing database models...");
+    await dbInstance.sync();
+
+    console.log("✅ Database initialized successfully.");
+    return dbInstance;
+};
+
 
 export const queryDatabase = async (database: Sequelize, query: string): Promise<any> => {
     try {

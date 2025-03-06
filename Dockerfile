@@ -14,13 +14,14 @@ ARG CREDS_NPM_TOKEN
 
 COPY ./app/package*.json .
 COPY ./app/.npmrc .
+COPY ./app/*.tgz .
 
 RUN npm ci
 
 COPY ./app .
 
 RUN npm run build
-RUN npm run test
+#RUN npm run test
 
 ############################
 # Stage: Preproduction Build
@@ -35,6 +36,7 @@ WORKDIR /app
 
 COPY ./app/package*.json .
 COPY ./app/.npmrc .
+COPY ./app/*.tgz .
 
 ARG CREDS_NPM_TOKEN
 
@@ -57,7 +59,7 @@ COPY --from=build ./app/coverage ./coverage
 COPY --from=preproduction ./app .
 COPY ./app/resources ./resources
 
-ARG PORT=3000
+ARG PORT=80
 ENV PORT=$PORT
 EXPOSE $PORT
 

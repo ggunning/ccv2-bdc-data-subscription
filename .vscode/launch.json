@@ -2,6 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug npm start",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "start", "--", "--inspect-brk"],
+            "port": 9229,
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/app",
+            "skipFiles": ["<node_internals>/**"]
+        },
+        {
             "name": "Debug IT data-subscription.test.ts",
             "type": "node",
             "request": "launch",

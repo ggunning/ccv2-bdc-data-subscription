@@ -83,6 +83,8 @@ export function validateInput<T>(schemaPath: string, json: Partial<T>): asserts 
         logger.error(`Validation by schema has failed: ${schemaValidator.errorsText()}`);
         throw new SchemaValidationError(`Validation by schema has failed. ${schemaValidator.errorsText()?.substring(0, 70)}`);
     }
+
+    console.log('Validation by schema has succeeded');
 };
 
 // Middleware to set default headers
